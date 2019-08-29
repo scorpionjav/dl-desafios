@@ -1,0 +1,22 @@
+.table {
+    border-collapse: collapse;
+}
+
+.table .character-row td {
+    border-bottom: 1px solid white;
+}
+
+.table .controls {
+    display: flex;
+    flex-direction: row;
+    margin: 5px;
+}
+
+.table .controls div {
+    cursor: pointer;
+}
+
+.table tr.killed td {
+    text-decoration: line-through;
+    color: gray;
+}
