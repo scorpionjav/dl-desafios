@@ -33,7 +33,7 @@ class Home extends Component {
      * Metodo manejador del evento click para el DIV Btn Kill
      * @returns {function}
      */
-    handlerKill = index => {
+   handleKill = index => {
         return () => {
             let { lista } = this.state;
             let selected = lista.splice(index, 1)[0];
@@ -47,7 +47,7 @@ class Home extends Component {
      * Metodo manejador del evento click para el DIV Btn UseRing
      * @returns {function}
      */
-    handlerUseRing = index => {
+   handleUseRing = index => {
         return () => {
             let { lista } = this.state;
             let selected = lista.find((l, i) => i === Number(index));
@@ -84,13 +84,13 @@ class Home extends Component {
                                             <div className="controls">
                                                 <div
                                                     className="btn-kill"
-                                                    onClick={this.handlerKill(il)}
+                                                    onClick={this.handleKill(il)}
                                                 >
                                                     {opciones[0]}
                                                 </div>
                                                 <div
                                                     className="btn-usering"
-                                                    onClick={this.handlerUseRing(il)}
+                                                    onClick={this.handleUseRing(il)}
                                                 >
                                                     {opciones[1]}
                                                 </div>
