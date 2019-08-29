@@ -1,19 +1,14 @@
 import React, { Component } from 'react';
 import './Home.css';
-
 import Title from './../../components/title/Title';
-
 import Container from './../../components/container/Container';
-
 import Input from './../../components/input/Input';
-
 import Table from './../../components/table/Table';
 import Tbody from './../../components/table/Tbody';
 import Td from './../../components/table/Td';
 import Th from './../../components/table/Th';
 import Thead from './../../components/table/Thead';
 import Tr from './../../components/table/Tr';
-
 import { getAll } from './../../services/hero.service';
 
 /**
@@ -61,30 +56,6 @@ class Home extends Component {
         }
     }
 
-    /**
-     * Metodo manejador del evento click para el DIV Controls
-     * @returns {undefined}
-     */
-    handlerOnClick = (event) => { 
-        const { dataset, className } = event.target;
-        let { lista } = this.state;
-        let selected ;
-        if (className === 'btn-kill') {
-            // todo: Tacha (Le agrega un estilo grisáceo)
-            selected = lista.splice(dataset.key, 1)[0];
-            selected.dead = true;
-            // todo: Manda al final de la tabla al row.
-            lista = lista.concat(selected);
-        } else if (className === 'btn-usering') {
-            // todo: Esconde el row de la tabla
-            selected = lista.find((l, i) => i === Number(dataset.key));
-            selected.ring = true;
-            // todo: Oculta la opción de usar anillo a todos los demás
-            this.setState({ anilloUsado: true })
-        }
-        this.setState({ lista });
-    }
-
     render() {
         const { encabezados, lista, opciones, anilloUsado } = this.state;
         return (
@@ -92,7 +63,7 @@ class Home extends Component {
                 <Title>Fellowship of the Ring</Title>
                 <Container>
                     <Input placeholder="search hero" />
-                    <Table className={anilloUsado ? 'used-ring': ''}>
+                    <Table className={anilloUsado ? "used-ring": ""}>
                         <Thead>
                             <Tr>
                                 {encabezados.map((e, ie) => (<Th key={ie}>{e}</Th>))}
@@ -123,18 +94,6 @@ class Home extends Component {
                                                 >
                                                     {opciones[1]}
                                                 </div>
-                                                {/* {
-                                                    opciones.map((o, io) => (
-                                                        <div
-                                                            key={io}
-                                                            className={(io === 0) ? "btn-kill" : "btn-usering"}
-                                                            data-key={il}
-                                                            onClick={this.handlerOnClick}
-                                                        >
-                                                            {o}
-                                                        </div>
-                                                    ))
-                                                } */}
                                             </div>
                                         </Td>
                                     </Tr>
