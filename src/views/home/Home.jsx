@@ -30,6 +30,7 @@ const Home = () => {
 
     /**
      * Metodo manejador del evento click para el DIV Btn Kill
+     * @param {index} index
      * @returns {function}
      */
     const handleKill = index => {
@@ -44,6 +45,7 @@ const Home = () => {
 
     /**
      * Metodo manejador del evento click para el DIV Btn UseRing
+     * @param {index} index
      * @returns {function}
      */
     const handleUseRing = index => {
@@ -66,6 +68,7 @@ const Home = () => {
 
     /**
      * Metodo manejador del evento click para el Boton Guardar Heroe
+     * @param {Object} heroe
      * @returns {function}
      */
     const handleAddHero = (hero) => {
@@ -75,6 +78,9 @@ const Home = () => {
         setViewAddForm(!viewAddForm);
     }
 
+    /**
+     * Valores para el context
+     */
     const data = {
         headers,
         list,

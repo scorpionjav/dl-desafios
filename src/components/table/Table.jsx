@@ -16,7 +16,11 @@ import HeroItem from '../HeroItem';
  * @returns {JSX.Element}
  */
 const Table = (props) => {
+    /**
+     * Para uso del context
+     */
     const { headers, list, options, ring, } = useContext(Context);
+
     return (<div>
         <TB className={`table ${ring && "used-ring"}`} striped bordered hover responsive variant="dark" size="sm">
             <thead>
