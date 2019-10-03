@@ -1,11 +1,11 @@
 import React, { useContext } from 'react';
-import Context from '../../context/Context';
-import HeroItem from '../HeroItem';
 import './Table.css';
-import Thead from './Thead';
-import Th from './Th';
-import Tbody from './Tbody';
-import Tr from './Tr';
+
+import Context from '../../context/Context';
+
+import { Table as TB } from 'react-bootstrap';
+
+import HeroItem from '../HeroItem';
 
 /**
 * Componente presentacional de tipo funcional para desplegar una Tabla
@@ -18,13 +18,17 @@ import Tr from './Tr';
 const Table = (props) => {
     const { headers, list, options, ring, } = useContext(Context);
     return (<div>
-        <table className={`table ${ring && "used-ring"}`}>
-            <Thead>
-                <Tr>
-                    {headers.map((e, ie) => (<Th key={ie}>{e}</Th>))}
-                </Tr>
-            </Thead>
-            <Tbody>
+        <TB className={`table ${ring && "used-ring"}`} striped bordered hover responsive variant="dark" size="sm">
+            <thead>
+                <tr>
+                    {
+                        headers.map((e, ie) => (
+                            <th key={ie} className="text-center">{e}</th>
+                        ))
+                    }
+                </tr>
+            </thead>
+            <tbody>
                 {
                     list.map((l, il) => (
                         <HeroItem
@@ -37,8 +41,8 @@ const Table = (props) => {
                         />
                     ))
                 }
-            </Tbody>
-        </table>
+            </tbody>
+        </TB>
     </div>)
 }
 
