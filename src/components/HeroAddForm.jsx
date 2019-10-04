@@ -1,8 +1,9 @@
-import React, { useState, useContext } from 'react';
+import React, { useContext } from 'react';
 
 import { Button, Form, Row, Col} from 'react-bootstrap';
 
 import Context from '../context/Context';
+import useInput from '../hooks/useInput';
 
 /**
 * Componente presentacional de tipo funcional para desplegar un Formulario
@@ -21,10 +22,10 @@ const HeroAddForm = function (props) {
     /**
     * Declaracion de los Hooks
     */
-    const [name, setName] = useState('');
-    const [race, setRace] = useState('');
-    const [age, setAge] = useState(0);
-    const [weapon, setWeapon] = useState(weapons[0]);
+    const name = useInput('');
+    const race = useInput('');
+    const age = useInput(0,'number');
+    const weapon= useInput(weapons[0]);
 
     /**
      * Metodo manejador del evento click para el Boton Guardar Heroe
@@ -34,15 +35,11 @@ const HeroAddForm = function (props) {
     const handleSubmit = e => {
         e.preventDefault();
         const hero = {
-            name,
-            race,
-            age,
-            weapon,
+            name: name.value,
+            race: race.value,
+            age: age.value,
+            weapon: weapon.value,
         };
-        setName('');
-        setRace('');
-        setAge(0);
-        setWeapon('');
         props.onAddNewHero(hero);
     }
 
@@ -52,7 +49,7 @@ const HeroAddForm = function (props) {
      * @returns {boolean} true or false
      */
     const isDisabled = (n, r, a) => {
-        return n === '' || r === '' || a < 0;
+        return n.value === '' || r.value === '' || a.value < 0;
     }
 
     return (
@@ -60,25 +57,25 @@ const HeroAddForm = function (props) {
             <Form.Group as={Row}>
                 <Form.Label column sm={3}>Name</Form.Label>
                 <Col sm={9}>
-                    <Form.Control name="name" type="text" value={name} onChange={(event) => { setName(event.target.value); }} />
+                    <Form.Control {...name} />
                 </Col>
             </Form.Group>
             <Form.Group as={Row}>
                 <Form.Label column sm={3}>Race</Form.Label>
                 <Col sm={9}>
-                    <Form.Control name="race" type="text" value={race} onChange={(event) => { setRace(event.target.value); }} />
+                    <Form.Control {...race} />
                 </Col>
             </Form.Group>
             <Form.Group as={Row}>
                 <Form.Label column sm={3}>Age</Form.Label>
                 <Col sm={9}>
-                    <Form.Control name="age" type="number" min="0" value={age} onChange={(event) => { setAge(event.target.value); }} />
+                    <Form.Control {...age} />
                 </Col>
             </Form.Group>
             <Form.Group as={Row}>
                 <Form.Label column sm={3}>Weapon</Form.Label>
                 <Col sm={9}>
-                <Form.Control as="select" name="weapon" onChange={(event) => { setWeapon(event.target.value); }}>
+                <Form.Control as="select" {...weapon}>
                     {
                         weapons.map((w, iw) => (
                             <option key={iw} value={w}>{w}</option>
