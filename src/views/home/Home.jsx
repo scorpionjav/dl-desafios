@@ -1,15 +1,24 @@
 import React, { useState } from 'react';
+import { connect} from 'react-redux';
+
+import {
+    getAllHeroes,
+    addHero,
+    deleteHero,
+    editHero,
+    killHero,
+    useRingHero,
+    searchHero,
+} from '../../store/actions/hero.actions';
+
 import './Home.css';
-
-import { getAll } from './../../services/hero.service';
-
-import Context from '../../context/Context';
-
-import { Button, Container, Row, Col, } from 'react-bootstrap';
+import { Button, Container, Row, Col, Form, } from 'react-bootstrap';
 
 import Title from './../../components/title/Title';
 import Table from './../../components/table/Table';
 import HeroAddForm from './../../components/HeroAddForm';
+
+import useInput from '../../hooks/useInput';
 
 /**
  * Componente presentacional de tipo funcional
@@ -17,46 +26,27 @@ import HeroAddForm from './../../components/HeroAddForm';
  * @author Jesus Acevedo <jesus06av(a)gmail.com>
  * @version 1.0.0
  */
-const Home = () => {
+const Home = (props) => {
     /**
     * Declaracion de los Hooks y constantes
     */
-    const headers = ['Name', 'Race', 'Age', 'Weapon', 'Controls'];
-    const [list, setList] = useState(getAll);
-    const options = ['☠ Kill', '💍 Use Ring'];
-    const [ring, setRing] = useState(false);
-    const [viewAddForm, setViewAddForm] = useState(false);
-    const weapons = ['Staff 🏑', 'Sword ⚔', 'Bow 🏹', 'Axe ⚒', 'Dagger 🗡'];
+    const [viewAddForm, setViewAddForm] = useState(false)
+    const textSearch = useInput('');
+    const propertySearch = useInput('name');
 
-    /**
-     * Metodo manejador del evento click para el DIV Btn Kill
-     * @param {index} index
-     * @returns {function}
-     */
-    const handleKill = index => {
-        return () => {
-            const currentList = list;
-            let selected = currentList.splice(index, 1)[0];
-            selected.dead = true;
-            const newList = currentList.concat(selected);
-            setList(newList);
-        }
-    }
-
-    /**
-     * Metodo manejador del evento click para el DIV Btn UseRing
-     * @param {index} index
-     * @returns {function}
-     */
-    const handleUseRing = index => {
-        return () => {
-            const currentList = list;
-            let selected = currentList.find((l, i) => i === Number(index));
-            selected.ring = true;
-            setList(currentList);
-            setRing(true);
-        }
-    }
+    const {
+        heroes,
+        addHero,
+        deleteHero,
+        editHero,
+        killHero,
+        useRingHero,
+        searchHero,
+        headers = ['#','Nombre', 'Raza', 'Edad', 'Arma', 'Poder', 'Controles', 'Opciones'],
+        options = ['☠ Matar', '💍 Usar Anillo'],
+        ring = false,
+        weapons = ['Staff 🏑', 'Sword ⚔', 'Bow 🏹', 'Axe ⚒', 'Dagger 🗡'],
+    } = props;
 
     /**
      * Metodo manejador del evento click para el Boton Agregar Heroe
@@ -66,36 +56,36 @@ const Home = () => {
         setViewAddForm(!viewAddForm);
     }
 
-    /**
-     * Metodo manejador del evento click para el Boton Guardar Heroe
-     * @param {Object} heroe
-     * @returns {function}
-     */
-    const handleAddHero = (hero) => {
-        const currentList = list;
-        currentList.push({...hero});
-        setList(currentList);
-        setViewAddForm(!viewAddForm);
-    }
-
-    /**
-     * Valores para el context
-     */
-    const data = {
-        headers,
-        list,
-        options,
-        ring,
-        weapons
-    }
-
     return (
-        <Context.Provider value={data}>
             <div className="home">
                 <Container>
                     <Row>
                         <Col className="text-center my-3">
-                            <Title>Fellowship of the Ring</Title>
+                            <Title>Comunidad del Anillo</Title>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col xs="12" md="8" className="text-center my-3 mx-auto">
+                            <Form.Group as={Row}>
+                                <Form.Label column sm={2} className="text-right font-weight-bold">Filtrar por:</Form.Label>
+                                <Col sm={3}>
+                                    <Form.Control as="select" className="font-weight-bold" {...propertySearch}>
+                                        <option value='name'>Nombre</option>
+                                        <option value='race'>Raza</option>
+                                        <option value='age'>Edad</option>
+                                        <option value='power'>Poder</option>
+                                        <option value='weapon'>Arma</option>
+                                    </Form.Control>
+                                </Col>
+                                <Col sm={4}>
+                                    <Form.Control {...textSearch}/>
+                                </Col>
+                                <Col sm={2}>
+                                    <Button variant="primary" 
+                                        onClick={() => searchHero(propertySearch.value, textSearch.value)}
+                                    >Buscar</Button>
+                                </Col>
+                            </Form.Group>
                         </Col>
                     </Row>
                     <Row>
@@ -103,19 +93,50 @@ const Home = () => {
                             {
                                 !viewAddForm ?
                                 <Button onClick={handleViewAddForm} variant="success">Agregar Nuevo</Button> :
-                                <HeroAddForm onCancelar={handleViewAddForm} onAddNewHero={handleAddHero}/>
+                                <HeroAddForm
+                                    weapons={weapons}
+                                    onCancelar={handleViewAddForm}
+                                    onAddNewHero={addHero}
+                                />
                             }
                         </Col>
                     </Row>
                     <Row>
-                        <Col xs="12" md="7" className="mx-auto">
-                            <Table onKillHero={handleKill} onUseRingHero={handleUseRing}/>
+                        <Col sm="12" md="9" className="mx-auto">
+                            <Table
+                                headers={headers}
+                                heroes={heroes}
+                                options={options}
+                                ring={ring}
+                                onKillHero={killHero}
+                                onUseRingHero={useRingHero}
+                                onDeleteHero={deleteHero}
+                                onEditHero={editHero}
+                                weapons={weapons}
+                            />
                         </Col>
                     </Row>
                 </Container>
             </div>
-        </Context.Provider>
     );
 }
 
-export default Home;
+const mapStateToProps = state => state.heroes;
+
+const mapDispatchToProps = (dispatch) => {
+    dispatch(getAllHeroes())
+    return {
+        addHero: hero => dispatch(addHero(hero)),
+        deleteHero: hero => dispatch(deleteHero(hero)),
+        editHero: hero => dispatch(editHero(hero)),
+        killHero: hero => dispatch(killHero(hero)),
+        useRingHero: hero => dispatch(useRingHero(hero)),
+        searchHero: (property, text) => dispatch(searchHero(property, text))
+
+    };
+};
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps,
+)(Home);

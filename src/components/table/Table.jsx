@@ -1,7 +1,5 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import './Table.css';
-
-import Context from '../../context/Context';
 
 import { Table as TB } from 'react-bootstrap';
 
@@ -15,11 +13,7 @@ import HeroItem from '../HeroItem';
  * @param {Object} props - contenedor de propiedades del componente
  * @returns {JSX.Element}
  */
-const Table = (props) => {
-    /**
-     * Para uso del context
-     */
-    const { headers, list, options, ring, } = useContext(Context);
+const Table = ({ headers, heroes, options, ring, onKillHero, onUseRingHero, onEditHero, weapons, onDeleteHero  }) => {
 
     return (<div>
         <TB className={`table ${ring && "used-ring"}`} striped bordered hover responsive variant="dark" size="sm">
@@ -34,14 +28,16 @@ const Table = (props) => {
             </thead>
             <tbody>
                 {
-                    list.map((l, il) => (
+                    heroes.map((h, ih) => (
                         <HeroItem
-                            key={il}
-                            hero={l}
-                            indexHero={il}
+                            key={h.id}
+                            hero={h}
                             optionsHero={options}
-                            onKillHero={props.onKillHero}
-                            onUseRingHero={props.onUseRingHero}
+                            onKillHero={onKillHero}
+                            onUseRingHero={onUseRingHero}
+                            onEditHero={onEditHero}
+                            weapons={weapons}
+                            onDeleteHero={onDeleteHero}
                         />
                     ))
                 }

@@ -7,9 +7,13 @@
     vertical-align: middle;
 }
 
-.table tr.dead td:nth-child(-n+4) {
+.table tr.dead td {
     text-decoration: line-through;
     color: gray;
+}
+
+.table tr.dead .controls button {
+    display: none;
 }
 
 .table tr.dead .controls .btn-kill,
