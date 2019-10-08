@@ -66,7 +66,7 @@ const heroesReducer = (prevState = initialState, action) => {
                 heroes: (action.payload.text === undefined || action.payload.text === '') ? JSON.parse(localStorage.getItem('backupHeroes'))
                     : prevState.heroes.filter(hero => {
                         const isCurrentHero = hero[action.payload.property].toString().toLowerCase();
-                        isCurrentHero.includes((action.payload.text).toString().toLowerCase());
+                        return isCurrentHero.includes((action.payload.text).toString().toLowerCase());
                     }),
             };
         default:
