@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 
 import {
@@ -30,7 +30,9 @@ const Home = (props) => {
     /**
     * Declaracion de los Hooks y constantes
     */
-    const [viewAddForm, setViewAddForm] = useState(false)
+    const [viewAddForm, setViewAddForm] = useState(false);
+    const [updatedList, setUpdatedList] = useState(false);
+    const [viewBtnAdd, setViewBtnAdd] = useState(true);
     const textSearch = useInput('');
     const propertySearch = useInput('name');
 
@@ -53,6 +55,25 @@ const Home = (props) => {
      */
     const handleViewAddForm = () => {
         setViewAddForm(!viewAddForm);
+    }
+
+    /**
+     * Metodo manejador del evento click para el Boton Filtrar
+     * @returns {function}
+     */
+    const handleSearch = (property, text) => {
+        searchHero(updatedList, heroes, property, text);
+        setUpdatedList(false);
+        (text === undefined || text === '') ? setViewBtnAdd(true) : setViewBtnAdd(false);
+    }
+
+    /**
+     * Metodo manejador del evento click para el Boton Guardar Heroe del Formulario
+     * @returns {function}
+     */
+    const handleAddNew = (hero) => {
+        addHero(hero);
+        setUpdatedList(true);
     }
 
     return (
@@ -80,8 +101,8 @@ const Home = (props) => {
                                     <Form.Control {...textSearch}/>
                                 </Col>
                                 <Col sm={2}>
-                                    <Button variant="primary" 
-                                        onClick={() => searchHero(propertySearch.value, textSearch.value)}
+                                    <Button variant="primary"
+                                        onClick={() => handleSearch(propertySearch.value, textSearch.value)}
                                     >Buscar</Button>
                                 </Col>
                             </Form.Group>
@@ -90,13 +111,15 @@ const Home = (props) => {
                     <Row>
                         <Col xs="12" md="6" className="text-center mx-auto my-3">
                             {
-                                !viewAddForm ?
-                                <Button onClick={handleViewAddForm} variant="success">Agregar Nuevo</Button> :
-                                <HeroAddForm
-                                    weapons={weapons}
-                                    onCancelar={handleViewAddForm}
-                                    onAddNewHero={addHero}
-                                />
+                                viewBtnAdd && (
+                                    !viewAddForm ?
+                                    <Button onClick={handleViewAddForm} variant="success">Agregar Nuevo</Button> :
+                                    <HeroAddForm
+                                        weapons={weapons}
+                                        onCancelar={handleViewAddForm}
+                                        onAddNewHero={handleAddNew}
+                                    />
+                                )
                             }
                         </Col>
                     </Row>
@@ -105,6 +128,7 @@ const Home = (props) => {
                             <Table
                                 headers={headers}
                                 heroes={heroes}
+                                setUpdatedList={setUpdatedList}
                                 options={options}
                                 onKillHero={killHero}
                                 onUseRingHero={useRingHero}
@@ -125,11 +149,11 @@ const mapDispatchToProps = (dispatch) => {
     dispatch(getAllHeroes())
     return {
         addHero: hero => dispatch(addHero(hero)),
-        deleteHero: hero => dispatch(deleteHero(hero)),
+        deleteHero: id => dispatch(deleteHero(id)),
         editHero: hero => dispatch(editHero(hero)),
-        killHero: hero => dispatch(killHero(hero)),
-        useRingHero: hero => dispatch(useRingHero(hero)),
-        searchHero: (property, text) => dispatch(searchHero(property, text))
+        killHero: id => dispatch(killHero(id)),
+        useRingHero: id => dispatch(useRingHero(id)),
+        searchHero: (updatedList, heroes, property, text) => dispatch(searchHero(updatedList, heroes, property, text))
     };
 };
 

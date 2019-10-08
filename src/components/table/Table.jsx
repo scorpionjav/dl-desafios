@@ -13,7 +13,7 @@ import HeroItem from '../HeroItem';
  * @param {Object} props - contenedor de propiedades del componente
  * @returns {JSX.Element}
  */
-const Table = ({ headers, heroes, options, onKillHero, onUseRingHero, onEditHero, weapons, onDeleteHero  }) => {
+const Table = ({ headers, heroes, options, onKillHero, onUseRingHero, onEditHero, weapons, onDeleteHero, setUpdatedList }) => {
 
     /**
     * Declaracion de los Hooks
@@ -25,8 +25,22 @@ const Table = ({ headers, heroes, options, onKillHero, onUseRingHero, onEditHero
      * @returns {function}
      */
     const handleUseRingHero = (id) => {
+        setUpdatedList(true);
         setRing(!ring);
         onUseRingHero(id);
+    }
+
+    const handleKillHero = (id) => {
+        setUpdatedList(true);
+        onKillHero(id);
+    }
+    const handleDeleteHero = (id) => {
+        setUpdatedList(true);
+        onDeleteHero(id);
+    }
+    const handleEditHero = (hero) => {
+        setUpdatedList(true);
+        onEditHero(hero);
     }
 
     return (<div>
@@ -42,18 +56,17 @@ const Table = ({ headers, heroes, options, onKillHero, onUseRingHero, onEditHero
             </thead>
             <tbody>
                 {
-                    console.log(heroes),
                     heroes.map((h, ih) => (
                         <HeroItem
                             key={h.id}
                             hero={h}
                             ring={ring}
                             optionsHero={options}
-                            onKillHero={onKillHero}
-                            onUseRingHero={handleUseRingHero}
-                            onEditHero={onEditHero}
                             weapons={weapons}
-                            onDeleteHero={onDeleteHero}
+                            onKillHero={handleKillHero}
+                            onUseRingHero={handleUseRingHero}
+                            onDeleteHero={handleDeleteHero}
+                            onEditHero={handleEditHero}
                         />
                     ))
                 }

@@ -15,6 +15,7 @@ const initialState = {
 const heroesReducer = (prevState = initialState, action) => {
     switch (action.type) {
         case HERO_GET_ALL:
+            localStorage.clear();
             return {
                 ...prevState,
                 heroes: action.payload,
@@ -57,10 +58,16 @@ const heroesReducer = (prevState = initialState, action) => {
                 }),
             };
         case HERO_SEARCH:
+            if (localStorage.getItem('backupHeroes') === undefined || localStorage.getItem('backupHeroes') == null || action.payload.updatedList) {
+                localStorage.setItem('backupHeroes', JSON.stringify(action.payload.heroes));
+            }
             return {
                 ...prevState,
-                heroes: (action.payload.text === undefined || action.payload.text === '') ? action.payload
-                        : prevState.heroes.filter(hero => hero[action.payload.property].toLowerCase().includes((action.payload.text).toLowerCase())),
+                heroes: (action.payload.text === undefined || action.payload.text === '') ? JSON.parse(localStorage.getItem('backupHeroes'))
+                    : prevState.heroes.filter(hero => {
+                        const isCurrentHero = hero[action.payload.property].toString().toLowerCase();
+                        isCurrentHero.includes((action.payload.text).toString().toLowerCase());
+                    }),
             };
         default:
             return prevState;

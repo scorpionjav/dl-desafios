@@ -52,9 +52,9 @@ export const useRingHero = (id) => {
     }
 };
 
-export const searchHero = (property, text) => {
+export const searchHero = (updatedList, heroes, property, text) => {
     return {
         type: HERO_SEARCH,
-        payload: (text === '' || text === undefined) ? getAll() : {property, text},
+        payload: {updatedList, heroes, property, text},
     }
 };
