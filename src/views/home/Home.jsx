@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { connect} from 'react-redux';
+import { connect } from 'react-redux';
 
 import {
     getAllHeroes,
@@ -44,7 +44,6 @@ const Home = (props) => {
         searchHero,
         headers = ['#','Nombre', 'Raza', 'Edad', 'Arma', 'Poder', 'Controles', 'Opciones'],
         options = ['☠ Matar', '💍 Usar Anillo'],
-        ring = false,
         weapons = ['Staff 🏑', 'Sword ⚔', 'Bow 🏹', 'Axe ⚒', 'Dagger 🗡'],
     } = props;
 
@@ -107,7 +106,6 @@ const Home = (props) => {
                                 headers={headers}
                                 heroes={heroes}
                                 options={options}
-                                ring={ring}
                                 onKillHero={killHero}
                                 onUseRingHero={useRingHero}
                                 onDeleteHero={deleteHero}
@@ -132,7 +130,6 @@ const mapDispatchToProps = (dispatch) => {
         killHero: hero => dispatch(killHero(hero)),
         useRingHero: hero => dispatch(useRingHero(hero)),
         searchHero: (property, text) => dispatch(searchHero(property, text))
-
     };
 };
 

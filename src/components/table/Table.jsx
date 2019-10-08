@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './Table.css';
 
 import { Table as TB } from 'react-bootstrap';
@@ -13,7 +13,21 @@ import HeroItem from '../HeroItem';
  * @param {Object} props - contenedor de propiedades del componente
  * @returns {JSX.Element}
  */
-const Table = ({ headers, heroes, options, ring, onKillHero, onUseRingHero, onEditHero, weapons, onDeleteHero  }) => {
+const Table = ({ headers, heroes, options, onKillHero, onUseRingHero, onEditHero, weapons, onDeleteHero  }) => {
+
+    /**
+    * Declaracion de los Hooks
+    */
+    const [ring, setRing] = useState(false);
+
+    /**
+     * Metodo manejador del evento click para el Boton Usar Anillo
+     * @returns {function}
+     */
+    const handleUseRingHero = (id) => {
+        setRing(!ring);
+        onUseRingHero(id);
+    }
 
     return (<div>
         <TB className={`table ${ring && "used-ring"}`} striped bordered hover responsive variant="dark" size="sm">
@@ -28,13 +42,15 @@ const Table = ({ headers, heroes, options, ring, onKillHero, onUseRingHero, onEd
             </thead>
             <tbody>
                 {
+                    console.log(heroes),
                     heroes.map((h, ih) => (
                         <HeroItem
                             key={h.id}
                             hero={h}
+                            ring={ring}
                             optionsHero={options}
                             onKillHero={onKillHero}
-                            onUseRingHero={onUseRingHero}
+                            onUseRingHero={handleUseRingHero}
                             onEditHero={onEditHero}
                             weapons={weapons}
                             onDeleteHero={onDeleteHero}

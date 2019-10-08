@@ -10,7 +10,7 @@ import HeroEditModal from './HeroEditModal';
  * @param {Object} props - contenedor de propiedades del componente
  * @returns {JSX.Element}
  */
-const HeroItem = ({hero, optionsHero, onKillHero, onUseRingHero, onEditHero, weapons, onDeleteHero }) => {
+const HeroItem = ({hero, ring, optionsHero, onKillHero, onUseRingHero, onEditHero, weapons, onDeleteHero }) => {
     /**
     * Declaracion de los Hooks
     */
